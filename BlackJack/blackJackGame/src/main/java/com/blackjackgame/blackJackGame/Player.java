@@ -2,179 +2,146 @@ package com.blackjackgame.blackJackGame;
 
 public class Player {
 
-	private String player_name;
+		public static final int DeckCount = 52;
+		private Card[] cards = new Card[DeckCount];
+		private int numCards;
 
-	private Card[] player_hand = new Card[10];
+		// initialize empty hand
+		public Player() {
 
-	private int number_cards = 0;
+			numCards = 0;
+		}
 
-	/**
-	 * @param input_name
-	 * @param input_player_money
-	 * Player is initialized with an empty hand
-	 */
-	public Player(String input_name) {
-		this.player_name = input_name;
-	}
+		// initialize hand from String
+		public Player(String str) throws Exception {
 
-	/**
-	 * @return the player_name
-	 */
-	public String getPlayerName() {
-		return player_name;
-	}
+			String[] tokens = str.split("\\s+");
 
-	/**
-	 * @return the entire player_hand as an array 
-	 */
-	public Card[] getPlayerHand() {
-		return player_hand;
-	}
+			for (int i = 0; i < tokens.length; i++) {
 
-	/**
-	 * @param c
-	 * @return a single card from the players_hand array
-	 */
-	public Card getCard(int c) {
-		
-		return this.player_hand[c];
-	}
-	
-
-
-	/**
-	 * void
-	 * 
-	 * @param input_card
-	 * Method adds a card to a player's hand and returns true if player hand is less then 21
-	 * 
-	 */
-	public boolean addCard(Card input_card) {
-		
-		this.player_hand[this.number_cards] = input_card;
-		number_cards++;
-		
-		return (this.sumOfHand() <= 21);
-	}
-	
-
-	/**
-	 * void
-	 * 
-	 * @param show_all_cards
-	 * Test for this method is in the VoidMethodTester class.
-	 * 
-	 */
-	public void printHand(boolean show_all_cards) {
-
-		System.out.println("This is " + player_name + "'s hand:");
-
-		for (int i = 0; i < player_hand.length; i++) {
-
-			// Check if value in player hand is null
-			if (player_hand[i] == null) {
-				continue;
-			}
-
-			// Dealer's hand
-			if (i == 0 && !show_all_cards) {
-
-				System.out.println(" [hidden]\n" + player_hand[i]);
-
-			} else if (show_all_cards) {
-
-				// Player's hand
-				System.out.println(player_hand[i]);
-			}
-		} // Closes for loop
-		System.out.println();
-	}
-
-	/**
-	 * int
-	 * 
-	 * @return the sum of a players hand
-	 */
-	public int sumOfHand() {
-
-		int hand_total = 0;
-		int num_aces = 0;
-
-		Card c;
-		
-		for (int i = 0; i < player_hand.length; i++) {
-			
-			// Check if value in player hand is null
-			// The null pointer exception is killing me
-			if (player_hand[i] == null) {
-				continue;
-			}
-			
-			c = player_hand[i];
-			
-			switch (c.getNumber()) {
-
-			case 1: // Ace
-				num_aces++;
-				break;
-			case 2:
-				hand_total += 2;
-				break;
-			case 3:
-				hand_total += 3;
-				break;
-			case 4:
-				hand_total += 4;
-				break;
-			case 5:
-				hand_total += 5;
-				break;
-			case 6:
-				hand_total += 6;
-				break;
-			case 7:
-				hand_total += 7;
-				break;
-			case 8:
-				hand_total += 8;
-				break;
-			case 9:
-				hand_total += 9;
-				break;
-			case 10:
-				hand_total += 10;
-				break;
-			case 11: // Jack
-				hand_total += 10;
-				break;
-			case 12: // Queen
-				hand_total += 10;
-				break;
-			case 13: // King
-				hand_total += 10;
-			} // Closes switch statement
-		} // Close for  loop
-
-		// Handle aces
-		for (int a = 0; a < num_aces; a++) {
-			if (hand_total > 10) {
-				hand_total += 1;
-			} else {
-				hand_total += 11;
+				Card card = new Card(tokens[i]);
+				addCard(card);
 			}
 		}
-		return hand_total;
-	}
-	
-	/**
-	 * void
-	 * Method resets the player's hand
-	 */
-	public void resetPlayerHand() {
-		for (int i = 0; i < 10; i++) {
-			this.player_hand[i] = null;
-		}
-		number_cards = 0;
-	}
 
-}
+		// return dealer up card
+		public Card getUpCard() {
+
+			return cards[0];
+		}
+
+		// add card to hand
+		public void addCard(Card card) throws Exception {
+
+			// check for duplicates
+			for (int i = 0; i < numCards; i++) {
+				if (card.equals(cards[i]))
+					throw new Exception("Duplicate card in Hand: " + card);
+
+			}
+
+			// add card
+			cards[numCards++] = card;
+
+		}
+
+		// clear hand
+		public void clear() {
+
+			numCards = 0;
+		}
+
+		// return card at index i
+		public Card getCard(int i) {
+
+			Card card = null;
+
+			if (i >= 0 && i < numCards)
+				card = cards[i];
+
+			return card;
+		}
+
+		// return the dealer's total hand value.
+		public int getScore() {
+
+			Card card;
+			int score = 0;
+			int countAces = 0;
+
+			// count score and aces
+			for (int i = 0; i < numCards; i++) {
+
+				card = cards[i];
+				int value = card.getValue();
+
+				if (value == 11) // ace?
+				{
+					countAces++;
+				}
+
+				score = score + value;
+			}
+
+			// subtract aces
+			while (score > 21 && countAces > 0) {
+				score = score - 10;
+				countAces--;
+			}
+
+			return score;
+
+		}
+
+		// return true if player can draw another card
+		public boolean playerCanDraw(Card dealerUpCard) {
+
+			int score = getScore();
+			int dealerUpCardValue = dealerUpCard.getValue();
+
+			if (score < 17 && dealerUpCardValue >= 7) {
+				return true;
+			} else if (score < 12 && dealerUpCardValue <= 6) {
+				return true;
+			} else
+				return false;
+		}
+
+		// return true if dealewr can draw another card
+		// stands at 17
+		public boolean dealerCanDraw() {
+
+			int score = getScore();
+			return score <= 16 || (score == 17 && hasAce());
+		}
+
+		// return num cards
+		public int getNumCards() {
+
+			return numCards;
+		}
+
+		// return true if has ace
+		public boolean hasAce() {
+			for (int i = 0; i < numCards; i++) {
+				if (cards[i].getRank().equals("A"))
+					return true;
+			}
+
+			return false;
+		}
+
+		// print hand
+		public String toString() {
+
+			String s = "";
+
+			for (int i = 0; i < numCards; i++) {
+				Card card = cards[i];
+				s += card + " ";
+			}
+
+			return s;
+		}
+
+	}

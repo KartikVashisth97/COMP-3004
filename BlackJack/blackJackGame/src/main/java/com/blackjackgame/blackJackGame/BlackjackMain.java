@@ -1,225 +1,349 @@
 package com.blackjackgame.blackJackGame;
 
-import java.util.InputMismatchException;
+import java.io.File;
 import java.util.Scanner;
 
 /**
- * @author John Rose Apr 26, 2017
+ * 
+ * Black jack game
+ *
  */
-public class BlackjackMain{
 
-	/**
-	 * void
-	 * 
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		
-		// Rules of the game
-		String[] rule_list_array = new String[7];
-		rule_list_array[0] = "You can not bet more money than you own.";
-		rule_list_array[1] = "Minimum bet is $1.";
-		rule_list_array[2] = "Bets are doubled if you win a hand.";
-		rule_list_array[3] = "You only lose the amount you bet.";
-		rule_list_array[4] = "If you break either the minimum or maximum bet rule the game will automatically start over.";
-		rule_list_array[5] = "You can play as long as your total money amount is greater than $0 or less than $10000.";
-		rule_list_array[6] = "No swear words allowed.";
-		
-		// Initialize Scanner object to take in input from player
-		Scanner player_input = new Scanner(System.in);
+public class BlackjackMain {
 
-		System.out.println("Please enter your name to begin Blackjack game or \"q\" to quit the game.");
-		String player_name = player_input.nextLine();
+	// constants
+	public static final int BLACKJACK = 21;
 
-		if (player_name.equalsIgnoreCase("q")) {
-			
-			System.out.println("\nThank you for playing!");
-			System.exit(1);
+	public static enum Scores {
+		NoWin, PlayerBlackjack, DealerBlackjack, BlackjackTieGame, TieGame, PlayerWins, DealerWins, DealerBusts, PlayerBusts
+	};
+
+	// make key board reader
+	private static final Scanner kybd = new Scanner(System.in);
+
+	private DeckOfCards deck;
+	private Player player;
+	private Player dealer;
+
+	private String mode = "C"; // opewration mode console or file input
+	private Scanner fsc; // input file stream
+
+	// construct black jack game
+	public BlackjackMain() throws Exception {
+		deck = new DeckOfCards();
+		player = new Player();
+		dealer = new Player();
+
+		// shuffle deck
+		deck.shuffle();
+
+	}
+
+	// get card from deck or file
+	public Card getCard() throws Exception {
+		Card card = null;
+
+		if (mode.equals("C"))
+			card = deck.deal();
+
+		// file mode
+		else {
+			String str = "";
+
+			try {
+				str = fsc.next();
+				card = new Card(str);
+			}
+
+			catch (Exception ex) {
+				System.out.println("Bad card in file: " + str);
+				throw new Exception("Bad card in file: " + str);
+			}
 		}
-		
-		// Initialize player and dealer set their money to play with
-		Player player_one = new Player(player_name);
 
-		// Dealer's money represents the total money the player is allowed to
-		// win
-		Player dealer = new Player("Dealer");
+		return card;
+	}
 
-		// Initialize deck of cards
-		DeckOfCards deck = new DeckOfCards();
+	// get dealer response from console or file
+	public String getResponse() throws Exception {
+		String response = "";
 
-		// Shuffle deck
-		deck.shuffleDeck();
+		if (mode.equals("C")) {
 
-		// Print basic rules for the player to read
-		System.out.println("\n" + player_name + " here are the basic rules:");
-		for (int i = 1; i <= rule_list_array.length; i++) {
+			response = kybd.nextLine().toUpperCase();
 
-			System.out.println(i + ". " + rule_list_array[i - 1]);
-	
+			while (!(response.equals("H") || response.equals("S"))) {
+				System.out.print("You must enter H or S: ");
+				response = kybd.nextLine().toUpperCase();
 
-		// Variable for player's answers
-		String answer;
-		
-		// Print out betting instructions and prompt player for bet amount
-		System.out.println("\nAlright, " + player_name + "Get ready for BlackJack!"); 
-		
-
-		
-
-		// Check for incorrect input and restart game if exception is thrown
-		try {
-
-			// Game should run while the player has cash
-			
-
-				// Create variable to mark when each round is over
-				boolean round_over = false;
-				// Check player bet is less than $1
-				
-
-					// Print basic rules for the player to read
-					System.out.println("\n" + player_name + " here are the basic rules. Please read them this time:");
-					for (int i1 = 1; i1 <= rule_list_array.length; i1++) {
-
-						System.out.println(i1 + ". " + rule_list_array[i1 - 1]);
-
-
-				// Check player did not bet more than they own
-			
-
-					System.out.println("\n" + player_name
-							+ ", I might have been born at night but it wasn't last night!"
-							+ "\nThat kind of behavior will not be tolerated if you would like to keep your teeth.");
-					System.out.println("\nThe game will reset now please read the rules again.\n");
-
-					// restart game
-					BlackjackMain.main(args);
-
-					
-				// Deal the player a card
-				player_one.addCard(deck.dealNextCard());
-
-				// Deal the dealer a card
-				dealer.addCard(deck.dealNextCard());
-
-				// Deal the player a card
-				player_one.addCard(deck.dealNextCard());
-
-				// Deal the dealer a card
-				dealer.addCard(deck.dealNextCard());
-
-				// While loop for player one to hit or stay
-				while (true) {
-
-					System.out.println();
-					System.out.println(player_name + " you are at " + player_one.sumOfHand() + " points.");
-
-					player_one.printHand(true);
-					dealer.printHand(false);
-
-					// Player's turn
-					System.out.println("Would you like to Hit or Stay?\nPlease enter H or S.");
-					answer = player_input.next();
-
-					// Player hits
-					if (answer.equalsIgnoreCase("H")) {
-
-						// Add a card to player hand
-						player_one.addCard(deck.dealNextCard());
-
-						// Check player for bust
-						if (player_one.sumOfHand() > 21) {
-							System.out.println();
-							System.out.println("You Busted! --> " + player_one.sumOfHand());
-							System.out.println(player_name + " kiss $" + " goodbye.");
-							round_over = true;
-							break;
-						}
-					} 
-
-					// Player stays
-					if (answer.equalsIgnoreCase("S")) {
-						break;
-					}
-
-				} // Closes player one inner game loop
-
-				// Show dealer cards once player has finished
-				System.out.println();
-				System.out.println(dealer.getPlayerName() + "'s cards before hit. --> " + dealer.sumOfHand());
-				dealer.printHand(true);
-
-				// Dealer hits at 16 and stays at 17
-				while ((dealer.sumOfHand() < 17) && round_over == false) {
-
-					// Deal card to dealer
-					dealer.addCard(deck.dealNextCard());
-					System.out.println(dealer.getPlayerName() + "'s hand after hit. --> " + dealer.sumOfHand());
-					dealer.printHand(true);
-
-				}
-
-				// Check to see if dealer busted
-				if (dealer.sumOfHand() > 21 && round_over == false) {
-					System.out.println();
-					System.out.println(dealer.getPlayerName() + " Busted! --> " + dealer.sumOfHand());
-					System.out.println(" so " + player_one.getPlayerName());
-					round_over = true;
-				}
-
-				// Check to see if dealer wins by total points
-				if ((dealer.sumOfHand() > player_one.sumOfHand()) && round_over == false) {
-
-					System.out.println(dealer.getPlayerName() + " Wins! --> " + dealer.sumOfHand());
-					System.out.println(player_name + " loses $");
-					round_over = true;
-					
-				}
-
-				// Check to see if there is a draw
-				if (dealer.sumOfHand() == player_one.sumOfHand() && round_over == false) {
-
-					System.out.println("It's a draw!");
-					System.out.println(player_name + " has " + player_one.sumOfHand() + " and " + dealer.getPlayerName()
-							+ " has " + dealer.sumOfHand());
-					round_over = true;
-				}
-
-				// Check to see if player one wins by total points
-				if (player_one.sumOfHand() > dealer.sumOfHand() && round_over == false) {
-
-					System.out.println(player_name + " Wins! --> " + player_one.sumOfHand());
-					round_over = true;
-				}
-
-				// Dealer wins by default
-				else if (round_over == false) {
-
-					System.out.println(dealer.getPlayerName() + " Wins!" + dealer.sumOfHand());
-				}
-
-				} 
-
-					
-					System.out.println("\nHand is over and " + player_name);
-					System.out.println("Do it to it Son!");
-					System.out.println();
-
-				// Reset player hand, playing deck and shuffle playing deck
-				player_one.resetPlayerHand();
-				dealer.resetPlayerHand();
-				deck = deck.resetDeck();
-				deck.shuffleDeck();
-				// Closes main game loop
-		
+			}
 		}
-	
-		// Print message for player when they've lost all their money
-		System.out.println("Dang " + player_name + "! You lost all your scratch.");
-		
 
-		// Close scanner object
-		player_input.close();
+		// file mode
+		else {
 
-}// Closes Main method
- // Closes class
+			try {
+				response = fsc.next().toUpperCase();
+
+				if (!(response.equals("H") || response.equals("S"))) {
+					throw new Exception("H/S command expected in file: " + response);
+				}
+			}
+
+			catch (Exception ex) {
+				throw new Exception("Bad H/S command in file: " + response);
+			}
+
+		}
+
+		return response;
+	}
+
+	// return score betwen 2 players
+	public Scores checkScore(Player player, Player dealer) {
+		int playerScore = player.getScore();
+		int dealerScore = dealer.getScore();
+
+		// check if tie
+		if (playerScore == dealerScore) {
+			if (playerScore == BLACKJACK && dealerScore == BLACKJACK) {
+				return Scores.BlackjackTieGame;
+			}
+
+			else {
+				return Scores.TieGame;
+			}
+		}
+
+		// check if dealer has a black jack
+		else if (dealerScore == BLACKJACK) {
+			return Scores.DealerBlackjack;
+		}
+
+		// check if player has a black jack
+		else if (playerScore == BLACKJACK) {
+			return Scores.PlayerBlackjack;
+		}
+
+		// check if dealer busts
+		else if (dealerScore > BLACKJACK) {
+			return Scores.DealerBusts;
+		}
+
+		// check if player busts
+		else if (playerScore > BLACKJACK) {
+			return Scores.PlayerBusts;
+		}
+
+		else if (playerScore > dealerScore) {
+			return Scores.PlayerWins;
+		}
+
+		else {
+			return Scores.DealerWins;
+		}
+
+	}
+
+	// run game
+	// get operating mode console or file
+	public void run(String[] args) throws Exception {
+
+		// input file name
+		String filename;
+
+		// ask console or file mode
+		do {
+			System.out.print("C = Console or F = File mode? ");
+			mode = kybd.nextLine().toUpperCase();
+		} while (!(mode.equals("C") || mode.equals("F")));
+
+		// open file
+		if (mode.equals("F")) {
+
+			// get file name from command line
+			if (args.length > 0) {
+				filename = args[0];
+			}
+
+			else {
+				System.out.print("Enter input File name: ");
+				filename = kybd.nextLine();
+			}
+
+			// try to open file
+			try {
+				fsc = new Scanner(new File(filename));
+			}
+
+			catch (Exception ex) {
+				System.out.println("Cannot open input File name " + filename);
+				return;
+			}
+		}
+
+		play();
+
+	}
+
+	// play game
+	public void play() throws Exception {
+
+		// scores
+		int playerScore = 0;
+		int dealerScore = 0;
+
+		// deal 2 cards to each player
+		Card card = null;
+		for (int i = 0; i < 2; i++) {
+			card = getCard();
+			player.addCard(card);
+		}
+
+		for (int i = 0; i < 2; i++) {
+			card = getCard();
+			dealer.addCard(card);
+		}
+
+		// show player cards
+		System.out.println("Player Cards: " + player);
+		System.out.println("Player Score: " + player.getScore());
+
+		// show dealer cards
+		System.out.println("Dealer Up Card: " + dealer.getUpCard());
+
+		// check score
+		Scores score = checkScore(player, dealer);
+
+		// check for black jack
+		if (score == Scores.BlackjackTieGame) {
+
+			System.out.println("Tie Game both dealer and player have a black jack!");
+			System.out.println("Game Over!");
+		}
+
+		else if (score == Scores.DealerBlackjack) {
+
+			System.out.println("Dealer has a black jack!");
+			System.out.println("Game Over!");
+		}
+
+		else if (score == Scores.PlayerBlackjack) {
+
+			System.out.println("Player has a black jack!");
+			System.out.println("Game Over!");
+
+		}
+
+		// continue playing
+		else {
+			
+			// hit or stand
+			System.out.print("Player (H)it or (S)tand: ");
+			String response = getResponse();
+
+			if (mode.equals("F"))
+				System.out.println(response);
+
+			boolean busted = false;
+			while (!busted && response.equalsIgnoreCase("H")) {
+				player.addCard(getCard());
+				playerScore = player.getScore();
+				System.out.print("Players Cards: "); // print players cards
+				System.out.println(player);
+				System.out.println("Player's score: " + player.getScore());
+
+				// check For bust
+				if (playerScore > BLACKJACK) {
+					System.out.println("Player You have busted, You Loose");
+					busted = true;
+				} else {
+					System.out.print("Player (H)it or (S)tand: ");
+					response = getResponse();
+					if (mode.equals("F"))
+						System.out.println(response);
+				}
+			}
+
+			
+			// not busted
+			if (!busted) {
+
+				// get players final score
+				System.out.print("Players Final Cards: "); // print players
+															// cards
+				System.out.println(player);
+				playerScore = player.getScore();
+				System.out.println("Player's final score: " + playerScore);
+
+				// then the dealer draws cards until reaching a total of 17 or
+				// more.
+
+				// get dealers score
+				dealerScore = dealer.getScore();
+				System.out.print("Dealer Score so far: " + dealerScore + "\n");
+				while (dealer.dealerCanDraw()) {
+					System.out.println("Dealer takes a card");
+					dealer.addCard(getCard());
+				}
+
+				dealerScore = dealer.getScore();
+				System.out.print("Final Dealer Score: " + dealerScore + "\n");
+
+				// print dealer Player
+				System.out.print("Dealers Player: ");
+				System.out.println(dealer);
+
+				// dealer busts
+				if (dealerScore > BLACKJACK) {
+					System.out.println("Dealer has busted! Player Wins");
+				}
+
+				else {
+					score = checkScore(player, dealer);
+
+					printWinner(score);
+
+				} // end else
+
+			}
+		}
+	}
+
+	// print winner
+	public void printWinner(Scores score) {
+
+		// player loose if the customer busts or if the customer's
+		// total is
+		// less than or equal to the dealer's and the dealer hasn't
+		// bust.
+
+		if (score == Scores.BlackjackTieGame) {
+			System.out.println("Blackjack Tie Game");
+
+		}
+
+		else if (score == Scores.TieGame) {
+			System.out.println("Tie Game");
+
+		}
+
+		else if (score == Scores.PlayerBlackjack) {
+			System.out.println("You got a Blackjack! You Win");
+		}
+
+		else if (score == Scores.DealerBlackjack) {
+			System.out.println("Dealer got a blackjack, You Loose, Dealer wins");
+		}
+
+		else if (score == Scores.PlayerWins) {
+			System.out.print("You Win" + "\n");
+		}
+
+		else if (score == Scores.DealerWins) {
+			System.out.print("You Loose, Dealer wins" + "\n");
+		}
+
+	}
+
+}

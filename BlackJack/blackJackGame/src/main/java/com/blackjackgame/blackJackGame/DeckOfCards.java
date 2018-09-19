@@ -1,108 +1,92 @@
 package com.blackjackgame.blackJackGame;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
+import java.util.ArrayList;
 
+public class DeckOfCards{
 
-/**
- * @author John Rose Apr 23, 2017
- */
+	// constants
+	public int NUM_CARDS = 52;
+	public int NUM_SUITS = 4;
+	public int NUM_RANKS = 13;
+	private List<Card> cards = new ArrayList<Card>();
 
-public class DeckOfCards {
+	// initialize deck
+	public DeckOfCards() throws Exception {
 
-	private Card[] deck;
-	private int number_of_cards = 52;
-
-	/**
-	 * Constructor creates a deck of cards the size specified in number of cards
-	 * variable
-	 * 
-	 */
-	public DeckOfCards() {
-
-		deck = new Card[number_of_cards];
-		int card_index = 0;
-
-		// Create for loop for each suit
-		for (int s = 0; s < 4; s++) {
-
-			// Create for loop for each number
-			for (int n = 1; n < 14; n++){
-
-				deck[card_index] = new Card(Suit.values()[s], n);
-				card_index++;
-
-			} // Closes number for loop
-		} // Close suit for loop
+		initialize();
 	}
 
-	/**
-	 * int
-	 * 
-	 * @return
-	 */
-	public int sizeOfDeck() {
-		return deck.length;
-	}
+	// initialize deck
+	private void initialize() throws Exception {
 
-	/**
-	 * void Test method in a separate main DefaultGameTester
-	 */
-	public void printDeck() {
+		cards = new ArrayList<Card>();
 
-		for (int i = 0; i < number_of_cards; i++) {
-			System.out.println(deck[i]);
-		}
-	}
+		for (int i = 0; i < NUM_SUITS; i++) {
 
-	/**
-	 * void
-	 */
-	public void shuffleDeck() {
-
-		List<Card> temp_list = Arrays.asList(deck);
-		Collections.shuffle(temp_list);
-	}
-
-	/**
-	 * @return the deck Method gets the deck of cards
-	 */
-	public Card[] getDeck() {
-		return deck;
-	}
-
-	/**
-	 * Card
-	 * 
-	 * @return the top card of the deck and shifts all the cards left in the
-	 *         deck to the left.
-	 * 
-	 */
-	public Card dealNextCard() {
-
-		// Get top card
-		Card top_card = this.deck[0];
-
-		// Shift the deck to next card
-		for (int c = 1; c < this.number_of_cards; c++) {
-
-			this.deck[c - 1] = this.deck[c];
+			for (int j = 0; j < NUM_RANKS; j++) {
+				cards.add(new Card(i, j));
+			}
 		}
 
-		this.deck[this.number_of_cards - 1] = null;
-
-		// Decrement number of cards in deck
-		this.number_of_cards--;
-
-		return top_card;
 	}
+
+	// return number of cards in deck
+	public int getNumCards() {
+		return cards.size();
+	}
+
+	// shuffle deck
+	public void shuffle() {
+
+		for (int i = 0; i < NUM_CARDS; i++) {
+
+			for (int j = 0; j < NUM_CARDS; j++) {
+
+				int x = (int) (Math.random() * 52);
+				int y = (int) (Math.random() * 52);
+				
+				Card t = cards.get(x);
+				cards.set(x, cards.get(y));
+				cards.set(y, t);
+				
+
+			}
+		}
+
+	}
+
+	// swap card at index i mf j
 	
-	/**
-	 * @param cards
-	 * Method returns a new deck
-	 */
-	public DeckOfCards resetDeck() {
-		
-		return new DeckOfCards();
-	}	
+
+	// deal one card
+	// shuffle deck if necessarry
+	public Card deal() throws Exception {
+		Card card = cards.remove(0);
+
+		if (cards.size() == 0) {
+			initialize();
+			shuffle();
+		}
+
+		return card;
+	}
+
+	// print deck
+	public String toString() {
+
+		int k = 0;
+		String s = "";
+
+		for (int i = 0; i < NUM_SUITS; i++) {
+
+			for (int j = 0; j < NUM_RANKS; j++) {
+				s += cards.get(k++) + " ";
+			}
+
+			s += "\n";
+		}
+
+		return s;
+	}
+
 }
