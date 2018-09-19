@@ -11,27 +11,27 @@ public class Card implements Comparable<Card>, Comparator<Card> {
 	private Suit card_suit;
 
 	/**
-	 * @param input_suit
-	 * @param input_id_number
+	 * @param suit
+	 * @param id_num
 	 * Constructor creates a card object with a suit and 
 	 */
-	public Card(Suit input_suit, int input_id_number) {
+	public Card(Suit suit, int id_num) {
 
-		this.card_suit = input_suit;
-		this.card_id_number = input_id_number;
+		this.card_suit = suit;
+		this.card_id_number = id_num;
 	}
 
 	/**
 	 * @return the card_id_number
 	 */
-	public int getCardIdNumber() {
+	public int getNumber() {
 		return card_id_number;
 	}
 
 	/**
 	 * @return the card_suit
 	 */
-	public Suit getCardSuit() {
+	public Suit getSuit() {
 		return card_suit;
 	}
 
@@ -110,12 +110,12 @@ public class Card implements Comparable<Card>, Comparator<Card> {
 	 */
 	public int compareTo(Card card) {
 		
-		if (card_id_number - card.getCardIdNumber() == 0) {
+		if (card_id_number - card.getNumber() == 0) {
 			
-			return card_suit.ordinal() - card.getCardSuit().ordinal();
+			return card_suit.ordinal() - card.getSuit().ordinal();
 		}
 		
-		return card_id_number - card.getCardIdNumber();	
+		return card_id_number - card.getNumber();	
 	}
 
 	/* (non-Javadoc)
@@ -123,21 +123,21 @@ public class Card implements Comparable<Card>, Comparator<Card> {
 	 */
 	public int compare(Card c1, Card c2) {
 
-		if (c1.getCardIdNumber() - c2.getCardIdNumber() == 0) {
+		if (c1.getNumber() - c2.getNumber() == 0) {
 			
-			return c1.getCardSuit().ordinal() - c2.getCardSuit().ordinal();
+			return c1.getSuit().ordinal() - c2.getSuit().ordinal();
 		}
 		
-		return c1.getCardIdNumber()- c2.getCardIdNumber();	
+		return c1.getNumber()- c2.getNumber();	
 	}
 	
 	// Has to implement so assertArrayEquals() will work
 	
 	public boolean equals(Object co) {
-		if (card_id_number != ((Card) co).getCardIdNumber()) {
+		if (card_id_number != ((Card) co).getNumber()) {
 			return false;
 		}
-		else if(card_id_number != ((Card) co).getCardIdNumber()) {	
+		else if(card_id_number != ((Card) co).getNumber()) {	
 			return false;
 		}
 		return true;

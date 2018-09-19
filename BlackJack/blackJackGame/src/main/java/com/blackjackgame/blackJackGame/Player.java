@@ -8,8 +8,6 @@ public class Player {
 
 	private int number_cards = 0;
 
-	
-
 	/**
 	 * @param input_name
 	 * @param input_player_money
@@ -60,6 +58,13 @@ public class Player {
 	}
 	
 
+	/**
+	 * void
+	 * 
+	 * @param show_all_cards
+	 * Test for this method is in the VoidMethodTester class.
+	 * 
+	 */
 	public void printHand(boolean show_all_cards) {
 
 		System.out.println("This is " + player_name + "'s hand:");
@@ -105,11 +110,9 @@ public class Player {
 				continue;
 			}
 			
-			testCard = player_hand[i];
-			
 			c = player_hand[i];
 			
-			switch (c.getCardIdNumber()) {
+			switch (c.getNumber()) {
 
 			case 1: // Ace
 				num_aces++;
