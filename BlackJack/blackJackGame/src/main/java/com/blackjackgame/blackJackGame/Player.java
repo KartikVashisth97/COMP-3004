@@ -3,7 +3,9 @@ package com.blackjackgame.blackJackGame;
 public class Player {
 
 		public static final int DeckCount = 52;
+		
 		private Card[] cards = new Card[DeckCount];
+		
 		private int numCards;
 
 		// initialize empty hand
@@ -15,11 +17,11 @@ public class Player {
 		// initialize hand from String
 		public Player(String str) throws Exception {
 
-			String[] tokens = str.split("\\s+");
+			String[] chips = str.split("\\s+");
 
-			for (int i = 0; i < tokens.length; i++) {
+			for (int i = 0; i < chips.length; i++) {
 
-				Card card = new Card(tokens[i]);
+				Card card = new Card(chips[i]);
 				addCard(card);
 			}
 		}

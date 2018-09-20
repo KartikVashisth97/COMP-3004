@@ -3,25 +3,17 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-/**
- * Unit test for simple App.
- */
+
 public class AppTest 
     extends TestCase
 {
-    /**
-     * Create the test case
-     *
-     * @param testName name of the test case
-     */
+   
     public AppTest( String testName )
     {
         super( testName );
     }
 
-    /**
-     * @return the suite of tests being tested
-     */
+   
     public static Test suite()
     {
         return new TestSuite( AppTest.class );
@@ -76,7 +68,7 @@ public class AppTest
     		
     	}
     	
-    	// count of 5 is accepable
+    	
     	assertTrue(count < 5);
     	}
     	
@@ -239,35 +231,50 @@ public class AppTest
     	{
  		// less than 16	
     	Player hand = new Player();
+    	
     	hand.addCard(new Card(0,8));
+    	
     	hand.addCard(new Card(0,4));
   
     	assertTrue(hand.dealerCanDraw());
     	
     	// is  16	
     	hand = new Player();
+    	
     	hand.addCard(new Card(0,10));
+    	
     	hand.addCard(new Card(0,4));
   
     	assertTrue(hand.dealerCanDraw());
     	
     	// 17 no ace
+    	
     	hand = new Player();
+    	
     	hand.addCard(new Card(0,10));
+    	
     	hand.addCard(new Card(0,5));
     	
+    	
+        	
+
     	assertTrue(!hand.dealerCanDraw());
     	
     	// 17 has ace
     	hand = new Player();
+    	
     	hand.addCard(new Card(0,12));
+    	
     	hand.addCard(new Card(0,4));
     	
     	assertTrue(hand.dealerCanDraw());
     	
     	// greater than 17
+    	
     	hand = new Player();
+    	
     	hand.addCard(new Card(0,10));
+    	
     	hand.addCard(new Card(0,11));
     	
     	assertTrue(!hand.dealerCanDraw());
@@ -275,32 +282,49 @@ public class AppTest
     	}
     	catch (Exception e) {
 
+    		
+    		
             assertTrue(false);
 		}
  	}
 
  
+ 	
  	// test if hand has a ace
+ 	
  	public void testHasAce() {
 
+ 		
+ 		
  		try
+ 		
  		{
- 	 	// hand has ace
+ 	 	
+ 			// hand has ace
     	Player hand = new Player();
+    	 
     	hand.addCard(new Card(0,12));
+    	
     	hand.addCard(new Card(0,5));
+    	
     	
     	assertTrue(hand.hasAce());
     	
-     	// hand has no ace
+     	
+    	// hand has no ace
+    	
     	hand = new Player();
+    	
     	hand.addCard(new Card(0,10));
+    	
     	hand.addCard(new Card(0,5));
+    	
     	
     	assertTrue(!hand.hasAce());
     	
     	}
-    	catch (Exception e) {
+    	
+ 		catch (Exception e) {
 
             assertTrue(false);
 		}
@@ -308,174 +332,275 @@ public class AppTest
  	}
  	
  	// test if hand has duplicate card
+ 	
  	public void testDuplicateCard() {
 
+ 	
  		try
+ 		
  		{
- 	 	// hand has duplicate card
- 		Player hand = new Player();
-    	hand.addCard(new Card(0,10));
-    	hand.addCard(new Card(0,10));
+ 	
+ 		
+ 			Player hand = new Player();
+    	
+ 			hand.addCard(new Card(0,10));
+    	
+ 			hand.addCard(new Card(0,10));
+ 		
  		}
+ 		
  		
  		catch (Exception e) {
 
-            assertTrue(true);
+        
+ 			assertTrue(true);
 		}
  		
  	 	// hand has do duplicate card
-    	try
-    	{
+    	
+ 		try
+    	
+ 		{
  
     	// hand has do duplicate card
-    		Player hand = new Player();
-    	hand.addCard(new Card(0,8));
-    	hand.addCard(new Card(0,5));
     	
-    	}
-    	catch (Exception e) {
+ 			Player hand = new Player();
+    	
+ 			hand.addCard(new Card(0,8));
+    	
+ 			hand.addCard(new Card(0,5));
+    	
+    	
+ 		}
+    	
+ 		catch (Exception e) {
 
             assertTrue(false);
-		}
+		
+ 		}
  		
  	}
     
-    // test add card score
-    public void testCardScore()
-    {
-    	try
-    	{
-    		Player hand = new Player();
-    	hand.addCard(new Card(0,2));
-    	hand.addCard(new Card(0,3));
-    	hand.addCard(new Card(0,5));
-    	hand.addCard(new Card(0,10));
-    	int score = hand.getScore();
-    	assertTrue(score==26);
-    	}
+   
+    
+ 	public void testCardScore()
+    
+ 	{
+    
+ 		try
     	
-    	catch (Exception e) {
+ 		{
+    	
+ 			Player hand = new Player();
+    	
+ 			hand.addCard(new Card(0,2));
+    	
+ 			hand.addCard(new Card(0,3));
+    	
+ 			hand.addCard(new Card(0,5));
+    	
+ 			hand.addCard(new Card(0,10));
+    	
+ 			int score = hand.getScore();
+    	
+ 			assertTrue(score==26);
+    	
+ 		}
+    	
+    	
+ 		catch (Exception e) {
 
-            assertTrue(false);
+        
+ 			assertTrue(false);
 		}
     }
     
-    // test add card score
-    public void testCardAceScoreBlackJack()
-    {
+  
+   
+ 	public void testCardAceScoreBlackJack()
+    
+ 	{
     	try
+    
     	{
+    	
     		Player hand = new Player();
-    	hand.addCard(new Card(0,10));
-    	hand.addCard(new Card(0,11));
-    	hand.addCard(new Card(0,12));
-    	assertTrue(hand.getScore()==21);
+    	
+    		hand.addCard(new Card(0,10));
+    	
+    		hand.addCard(new Card(0,11));
+    	
+    		hand.addCard(new Card(0,12));
+    	
+    		assertTrue(hand.getScore()==21);
+    	
     	}
+    	
     	
     	catch (Exception e) {
 
-            assertTrue(false);
+        
+    		assertTrue(false);
 		}
     }
     	
-    // test add card score
-    public void testCardAceScoreBlackJack2()
-    {
-    	try
-    	{
-    		Player hand = new Player();
-    	hand.addCard(new Card(0,10));
-    	hand.addCard(new Card(0,12));
-    	assertTrue(hand.getScore()==21);
-    	}
+   
+    
+ 	public void testCardAceScoreBlackJack2()
+    
+ 	{
+    
+ 		try
     	
-    	catch (Exception e) {
+ 		{
+    	
+ 			Player hand = new Player();
+    	
+ 			hand.addCard(new Card(0,10));
+    	
+ 			hand.addCard(new Card(0,12));
+    	
+ 			assertTrue(hand.getScore()==21);
+    	
+ 		}
+    	
+    	
+ 		catch (Exception e) {
 
-            assertTrue(false);
+        
+ 			assertTrue(false);
 		}
     }
     
-    // test add card score
-    public void testCardAceScoreBlackJack3()
-    {
-    	try
-    	{
-    		Player hand = new Player();
-    	hand.addCard(new Card(0,12));
-    	hand.addCard(new Card(0,10));
-    	assertTrue(hand.getScore()==21);
-    	}
+    
+    
+ 	public void testCardAceScoreBlackJack3()
+    
+ 	{
+    
+ 		try
     	
-    	catch (Exception e) {
+ 		{
+    	
+ 			Player hand = new Player();
+    	
+ 			hand.addCard(new Card(0,12));
+    	
+ 			hand.addCard(new Card(0,10));
+    	
+ 			assertTrue(hand.getScore()==21);
+    	
+ 		}
+    	
+    	
+ 		catch (Exception e) {
 
-            assertTrue(false);
+        
+ 			assertTrue(false);
+		
+ 		}
+    }
+    
+    
+ 	
+    
+ 	public void testCardAceScoreBlackJack4()
+    
+ 	{
+    
+ 		try
+    	
+ 		{
+    	
+ 			Player hand = new Player();
+    	
+ 			hand.addCard(new Card(0,12));
+    	
+ 			hand.addCard(new Card(0,10));
+    	
+ 			hand.addCard(new Card(1,10));
+    	
+ 			assertTrue(hand.getScore()==21);
+    	
+ 		}
+    	
+    	
+ 		catch (Exception e) {
+
+        
+ 			assertTrue(false);
 		}
     }
     
-    // test add card score
-    public void testCardAceScoreBlackJack4()
-    {
-    	try
-    	{
-    		Player hand = new Player();
-    	hand.addCard(new Card(0,12));
-    	hand.addCard(new Card(0,10));
-    	hand.addCard(new Card(1,10));
-    	assertTrue(hand.getScore()==21);
-    	}
-    	
-    	catch (Exception e) {
-
-            assertTrue(false);
-		}
-    }
+   
     
-    // test add card score
-    public void testCardAceScore()
-    {
+ 	public void testCardAceScore()
+    
+ 	{
+    
+ 		
     	
-    	try
-    	{
-    		Player hand = new Player();
-    	hand.addCard(new Card(0,10));
-    	hand.addCard(new Card(0,1));
-      	hand.addCard(new Card(2,2));
-    	hand.addCard(new Card(0,12));
-    	int score = hand.getScore();
-    	assertTrue(score==18);
-    	}
-    	catch (Exception e) {
+ 		try
+    	
+ 		{
+    	
+ 			Player hand = new Player();
+    	
+ 			hand.addCard(new Card(0,10));
+    	
+ 			hand.addCard(new Card(0,1));
+      	
+ 			hand.addCard(new Card(2,2));
+    	
+ 			hand.addCard(new Card(0,12));
+    	
+ 			int score = hand.getScore();
+    	
+ 			assertTrue(score==18);
+    	
+ 		}
+    	
+ 		catch (Exception e) {
 
-            assertTrue(false);
+        
+ 			assertTrue(false);
 		}
     }
     	
-    // test hand score 1
-    // black jack tie
-    public void testHandScores1()
+    
+    public void testHScores1()
+    
     {
     	try
+    
     	{
+    	
     		Player player = new Player("DK SA");
+    		
     		Player dealer = new Player("SQ DA");
         
-        BlackjackMain bj = new BlackjackMain();
+       
+    		BlackjackMain bj = new BlackjackMain();
         
-        BlackjackMain.Scores score = bj.checkScore(player, dealer);
         
-        assertTrue(score == BlackjackMain.Scores.BlackjackTieGame);
+    		BlackjackMain.Scores score = bj.checkScore(player, dealer);
+        
+        
+    		assertTrue(score == BlackjackMain.Scores.BJ_Tie);
+    	
     	}
     	
     	catch(Exception ex)
+    	
     	{
+    	
     		assertTrue(false);
     	}
     	
     }
     
-    // test hand score 2
-    // player wins
-    public void testHandScores2()
+   
+    public void testHScores2()
     {
     	try
     	{
@@ -498,7 +623,7 @@ public class AppTest
     
     // test hand score 3
     // playewr wins
-    public void testHandScores3()
+    public void testHScores3()
     {
     	try
     	{
@@ -509,7 +634,7 @@ public class AppTest
         
         BlackjackMain.Scores score = bj.checkScore(player, dealer);
         
-        assertTrue(score == BlackjackMain.Scores.PlayerWins);
+        assertTrue(score == BlackjackMain.Scores.Pl_Win);
     	}
     	
     	catch(Exception ex)
@@ -521,7 +646,7 @@ public class AppTest
     
     // test hand score 4
     // dealer wins
-    public void testHandScores4()
+    public void testHScores4()
     {
     	try
     	{
@@ -544,7 +669,7 @@ public class AppTest
     
     // test hand score 5
     // black jack  player
-    public void testHandScores5()
+    public void testHScores5()
     {
     	try
     	{
@@ -555,7 +680,7 @@ public class AppTest
         
         BlackjackMain.Scores score = bj.checkScore(player, dealer);
         
-        assertTrue(score == BlackjackMain.Scores.PlayerBlackjack);
+        assertTrue(score == BlackjackMain.Scores.Pl_BJ);
     	}
     	
     	catch(Exception ex)
@@ -567,7 +692,7 @@ public class AppTest
     
     // test hand score 6
     // black jack dealer
-    public void testHandScores6()
+    public void testHScores6()
     {
     	try
     	{
@@ -578,7 +703,7 @@ public class AppTest
         
         BlackjackMain.Scores score = bj.checkScore(player, dealer);
         
-        assertTrue(score == BlackjackMain.Scores.DealerBlackjack);
+        assertTrue(score == BlackjackMain.Scores.Dealer_BJ);
     	}
     	
     	catch(Exception ex)
